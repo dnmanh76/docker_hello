@@ -1,37 +1,24 @@
-node {
-    def app
-
+pipeline {
+    agent {label 'jenkinslave'}
     stage('Clone repository') {
-        /* Let's make sure we have the repository cloned to our workspace */
-
-        checkout scm
+        steps{
+            sh "checkout scm"
+        }
     }
 
     stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
-
-        app = docker.build("getintodevops-hellonode:1")
+        steps{
+            sh "docker build . -t getintodevops-hellonode:${env.BUILD_NUMBER}"
+        }
     }
 
     stage('Test image') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach ;-) */
-
-        app.inside {
+        steps{
             sh 'echo "Tests passed"'
         }
     }
 
     stage('Push image') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-        /*docker.withRegistry('https://registry.hub.docker.com/duongngocmanh', 'Docker-hub-credentials') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-        }*/
         steps{
             sh "docker login -u duongngocmanh -p Qmhmq678"
             sh "docker tag getintodevops-hellonode:${env.BUILD_NUMBER} duongngocmanh/getintodevops-hellonode:${env.BUILD_NUMBER}"
