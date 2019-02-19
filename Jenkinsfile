@@ -1,5 +1,10 @@
 node {
     def app
+    def dockerTool = tool name: 'myDocker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
+    withEnv(["DOCKER=${dockerTool}/bin"]) {
+      //stages
+      //now we can simply call: dockerCmd 'run mycontainer'
+    }
 
     stage('Clone repository') {
         checkout scm
@@ -16,9 +21,9 @@ node {
     }
 
     stage('Push image') {
-        docker.withRegistry('https://registry.hub.docker.com', 'Docker-hub-credentials') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-        }
+        dockerCmd 'push duongngocmanh/getintodevops/hellonode:${env.BUILD_NUMBER}'
     }
+}
+def dockerCmd(args) {
+    sh "${DOCKER}/docker ${args}"
 }
