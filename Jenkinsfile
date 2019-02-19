@@ -1,43 +1,24 @@
-pipeline {
-    agent {
-        docker 'maven:3-alpine'
+node {
+    def app
+
+    stage('Clone repository') {
+        checkout scm
     }
-    stages {
-        stage('Clone repository') {
-            steps{
-                checkout scm
-            }
-        }
-        stage('Initialize'){
-            steps{
-                def dockerHome = tool 'myDocker'
-                env.PATH = "${dockerHome}/bin:${env.PATH}"
-            }
-        }
-        stage ('Docker') {
-            steps {
-                sh 'docker version'
-            }
-        }
 
-        stage('Build image') {
-            steps{
-                sh 'docker build . -t getintodevops-hellonode:${env.BUILD_NUMBER}'
-            }
-        }
+    stage('Build image') {
+        app = docker.build("getintodevops/hellonode")
+    }
 
-        stage('Test image') {
-            steps{
-                sh 'echo "Tests passed"'
-            }
+    stage('Test image') {
+        app.inside {
+            sh 'echo "Tests passed"'
         }
+    }
 
-        stage('Push image') {
-            steps{
-                sh "docker login -u duongngocmanh -p Qmhmq678"
-                sh "docker tag getintodevops-hellonode:${env.BUILD_NUMBER} duongngocmanh/getintodevops-hellonode:${env.BUILD_NUMBER}"
-                sh "docker push registry.hub.docker.com/getintodevops-hellonode:${env.BUILD_NUMBER}"
-            }
+    stage('Push image') {
+        docker.withRegistry('https://registry.hub.docker.com', 'Docker-hub-credentials') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
         }
     }
 }
