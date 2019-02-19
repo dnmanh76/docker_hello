@@ -6,7 +6,7 @@ node('master') {
     checkout scm
   }
   stage('Build image') {
-    dockerCmd 'build . -t getintodevops-hellonode:${env.BUILD_NUMBER}'
+    dockerCmd "build . -t getintodevops-hellonode:${env.BUILD_NUMBER}"
   }
   
 }
