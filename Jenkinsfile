@@ -28,9 +28,14 @@ node {
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('duongngocmanh', 'Docker-hub-credentials') {
+        /*docker.withRegistry('https://registry.hub.docker.com/duongngocmanh', 'Docker-hub-credentials') {
             app.push("${env.BUILD_NUMBER}")
             app.push("latest")
+        }*/
+        steps{
+            sh "docker login -u duongngocmanh -p Qmhmq678"
+            sh "docker tag getintodevops-hellonode:${env.BUILD_NUMBER} duongngocmanh/getintodevops-hellonode:${env.BUILD_NUMBER}"
+            sh "docker push registry.hub.docker.com/getintodevops-hellonode:${env.BUILD_NUMBER}"
         }
     }
 }
