@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build image') {
             steps{
-                sh "docker build . -t getintodevops-hellonode:${env.BUILD_NUMBER}"
+                docker build . -t getintodevops-hellonode:${env.BUILD_NUMBER}
             }
         }
 
