@@ -15,8 +15,8 @@ node('master') {
   stage('Push image') {
 
     dockerCmd "login -u duongngocmanh -p Qmhmq678"
-    dockerCmd "docker tag getintodevops-hellonode:${env.BUILD_NUMBER} duongngocmanh/getintodevops-hellonode:${env.BUILD_NUMBER}"
-    dockerCmd "docker push duongngocmanh/getintodevops-hellonode:${env.BUILD_NUMBER}"
+    dockerCmd "tag getintodevops-hellonode:${env.BUILD_NUMBER} duongngocmanh/getintodevops-hellonode:${env.BUILD_NUMBER}"
+    dockerCmd "push duongngocmanh/getintodevops-hellonode:${env.BUILD_NUMBER}"
   }
 }
 
