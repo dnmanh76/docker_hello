@@ -9,9 +9,15 @@ pipeline {
             }
         }
 
+        stage ('Docker') {
+            steps {
+                sh 'docker version'
+            }
+        }
+
         stage('Build image') {
             steps{
-                docker build . -t getintodevops-hellonode:${env.BUILD_NUMBER}
+                sh 'docker build . -t getintodevops-hellonode:${env.BUILD_NUMBER}'
             }
         }
 
