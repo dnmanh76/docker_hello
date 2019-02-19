@@ -1,9 +1,6 @@
 pipeline {
     agent {
-        docker {
-            registryUrl 'https://registry.hub.docker.com/'
-            registryCredentialsId 'Docker-hub-credentials'
-        }
+        docker 'maven:3-alpine'
     }
     stages {
         stage('Clone repository') {
