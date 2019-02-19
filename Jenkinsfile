@@ -1,5 +1,4 @@
 pipeline {
-    agent {label 'jenkinslave'}
     stages {
         stage('Clone repository') {
             steps{
