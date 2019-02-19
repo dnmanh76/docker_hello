@@ -1,29 +1,13 @@
-node {
-    def app
-    def dockerTool = tool name: 'myDocker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
-    withEnv(["DOCKER=${dockerTool}/bin"]) {
-      //stages
-      //now we can simply call: dockerCmd 'run mycontainer'
-    }
+node('master') {
+  def dockerTool = tool name: 'myDocker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
+  withEnv(["DOCKER=${dockerTool}/bin"]) {
 
-    stage('Clone repository') {
-        checkout scm
-    }
-
-    stage('Build image') {
-        app = docker.build("duongngocmanh/getintodevops/hellonode")
-    }
-
-    stage('Test image') {
-        app.inside {
-            sh 'echo "Tests passed"'
-        }
-    }
-
-    stage('Push image') {
-        dockerCmd 'push duongngocmanh/getintodevops/hellonode:${env.BUILD_NUMBER}'
-    }
+  }
+  stage('Initialize'){
+    dockerCmd '--version'
+  }
 }
+
 def dockerCmd(args) {
-    sh "${DOCKER}/docker ${args}"
+    sh "sudo ${DOCKER}/docker ${args}"
 }
