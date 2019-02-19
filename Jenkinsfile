@@ -1,8 +1,6 @@
 pipeline {
     agent {
         docker {
-            image 'duongngocmanh/getintodevops-hellonode'
-            label 'my-defined-label'
             registryUrl 'https://registry.hub.docker.com/'
             registryCredentialsId 'Docker-hub-credentials'
         }
