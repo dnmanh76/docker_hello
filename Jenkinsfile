@@ -5,7 +5,7 @@ node('master') {
 }
 
 def dockerCmd(args) {
-  docker.withTool("default"){
+  docker.withTool("myDocker"){
     sh "docker ${args}"
   }
 }
